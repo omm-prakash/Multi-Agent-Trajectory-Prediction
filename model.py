@@ -35,20 +35,27 @@ class Encoder(nn.Module):
                 nn.init.kaiming_uniform_(param)
 
     def in_mlp_(self):
-        assert self.in_mlp_layers[-1]==self.d_model, 'Please ensure the last layer of the MLP is same as d_model.'
+        # assert self.in_mlp_layers[-1]==self.d_model, 'Please ensure the last layer of the MLP is same as d_model.'
         mlp = nn.Sequential()
         in_feats = self.embedding_dim+self.n_features if self.embed_before_mlp else self.n_features
 
         for (layer_idx, out_feats) in enumerate(self.in_mlp_layers):
-            if (not self.embed_before_mlp) and (layer_idx == len(self.in_mlp_layers) - 1):
-                assert self.d_model-self.embedding_dim>1, 'd_model must be greater than embedding_dim atleast by 1.'
-                out_feats = out_feats - self.embedding_dim
-
+            # if (not self.embed_before_mlp) and (layer_idx == len(self.in_mlp_layers) - 1):
+            #     assert self.d_model-self.embedding_dim>1, 'd_model must be greater than embedding_dim atleast by 1.'
+            #     out_feats = out_feats - self.embedding_dim
             layer = nn.Linear(in_feats, out_feats)
             mlp.add_module(f"layer{layer_idx}", layer)
             mlp.add_module(f"activation{layer_idx}", self.activation)
             mlp.add_module(f'drop{layer_idx}', nn.Dropout(self.drop))
             in_feats = out_feats
+        if (not self.embed_before_mlp) and (layer_idx == len(self.in_mlp_layers) - 1):
+            assert self.d_model-self.embedding_dim>1, 'd_model must be greater than embedding_dim atleast by 1.'
+            out_feats = self.d_model - self.embedding_dim
+        else:
+            out_feats = self.d_model
+        layer = nn.Linear(in_feats, out_feats)
+        mlp.add_module(f"layer_final", layer)
+
         return mlp
 
     def embedding_(self):
