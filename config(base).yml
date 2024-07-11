@@ -1,0 +1,41 @@
+model:
+    transformer:
+        name: 'transformer'
+        d_model: 32
+        nhead: 2
+        n_encoder_layer: 1 # number of encoder layer
+        n_decoder_layer: 1 # number of decoder layer
+        dim_feedforward: 64 # dimension of hidden layer of FF in transformer
+        drop: 0 # dropout ratio
+        batch_first: true # to pass into pytorch enocder layer module
+        embedding_dim: 20 # embedding dimension of agent IDs
+        in_mlp_layers: [32] # input side MLP
+        out_mlp_layers: [32] # output side MLP
+        embed_before_mlp: false # check for using agent embedding before input side MLP
+        only_encoder: true # check for using only encoder of transformer
+        dynamic_mask: false # check for using ball2vec++ mask(i.e., true) against ball2vec mask(i.e., false)
+
+train:
+    epochs: 100 # no. of epochs
+    batch_size: 32 
+    lr: 0.001 # initial learning rate 
+    num_workers: 0 
+    use_agent_id: true # check for using agent ID
+    use_pos_embedding: true # check for using position embedding
+    weight_folder: 'weights' # name of folder of stored parameters of model
+    save_model: True # check for saving model parameters
+    save_step: 10 # no. of epochs to skip for saving model
+    # preload: 'latest' # either "latest" or specifie the epoch
+    skip_validation: false # check for validation step: false for validation
+    val_step: 2 # no. of epochs to skip for validation step
+
+data:
+    directory: 'data'
+    charge:
+        name: 'charge'
+        n_particles: 5
+        name_format: '{data}_{mode}_charged{n}.npy'
+        encoder_ratio: 0.55
+        test_encoder_ratio: 0.6
+        
+        
