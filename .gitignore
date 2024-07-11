@@ -1,0 +1,7 @@
+.bin
+.vscode
+__pycache__
+results
+data/charge/charged5
+data/charge/charged10
+test_model.pt
