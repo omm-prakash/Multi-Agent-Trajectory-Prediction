@@ -1,0 +1,14 @@
+Charge Data
+
+Data Sequesnce: charge, X, Y, Vx, Vy
+Train Data
+Max: tensor([1.0000, 5.0000, 5.0000, 6.4477, 5.9122], dtype=torch.float64)
+Min: tensor([-1.0000, -5.0000, -5.0000, -6.4701, -6.1946], dtype=torch.float64)
+
+Valid Data
+Max: tensor([1.0000, 5.0000, 5.0000, 5.9026, 5.9866], dtype=torch.float64)
+Min: tensor([-1.0000, -5.0000, -5.0000, -5.8401, -6.1741], dtype=torch.float64)
+
+Test Data
+Max: tensor([1.0000, 5.0000, 5.0000, 5.8954, 5.9297], dtype=torch.float64)
+Min: tensor([-1.0000, -5.0000, -5.0000, -6.1492, -6.7774], dtype=torch.float64)
