@@ -7,7 +7,7 @@ Multi-agent movement trajectory prediction is a research field focusing on forec
 
 In this direction two recent papers, i.e., *Baller2vec* and *Baller2vec++* have made significant progress. Baller2vec introduces a multi-entity generalization of the standard Transformer that can efficiently integrate information across entities and time with minimal assumptions. Building on this work, baller2vec++ incorporates a specially designed `self-attention mask` and "`look-ahead`" trajectory sequences to better model statistically dependent agent trajectories. 
 
-![alt text](image.png)
+![alt text](.img/mask.png)
 A simple technique for learning to forecast statistically dependent agent trajectories is to modify the baller2vec self-attention mask such that it may "look ahead" at future positions of agents whose trajectories are created previous to the agent being processed in the current time step.
 
 In *Rudolph et al.*, author presented a unique self-supervised technique for multiagent trajectories, and developed a masking strategy that makes masking of different trajectories independent of one another, as well as a unique transformer architecture that factorises over time and agents. This renders our pretraining model's encoder permutation equivariant with respect to trajectory order, making it ideal for downstream tasks that need *permutation invariance with respect to agent order*.
@@ -130,7 +130,7 @@ At the first run code will create a directory named as `results`. A typical resu
 
 ## Results
 ### Model Prediction Visualization
-![alt text](image-1.png)
+![alt text](.img/test.png)
 
 A sample prediction of the trained model, where 
 - `solid (_)` lines indicate the actual particle trajectory 
