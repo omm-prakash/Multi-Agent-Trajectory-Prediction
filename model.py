@@ -37,7 +37,7 @@ class Encoder(nn.Module):
     def in_mlp_(self):
         # assert self.in_mlp_layers[-1]==self.d_model, 'Please ensure the last layer of the MLP is same as d_model.'
         mlp = nn.Sequential()
-        in_feats = self.embedding_dim+self.n_features if self.embed_before_mlp else self.n_features
+        in_feats = self.embedding_dim+self.n_features if self.embed_before_mlp and self.use_agent_id else self.n_features
 
         for (layer_idx, out_feats) in enumerate(self.in_mlp_layers):
             # if (not self.embed_before_mlp) and (layer_idx == len(self.in_mlp_layers) - 1):
@@ -52,6 +52,8 @@ class Encoder(nn.Module):
             assert self.d_model-self.embedding_dim>1, 'd_model must be greater than embedding_dim atleast by 1.'
             out_feats = self.d_model - self.embedding_dim
         else:
+            out_feats = self.d_model
+        if not self.use_agent_id:
             out_feats = self.d_model
         layer = nn.Linear(in_feats, out_feats)
         mlp.add_module(f"layer_final", layer)
