@@ -1,26 +1,26 @@
 model:
     transformer:
         name: 'transformer'
-        d_model: 32
-        nhead: 2
-        n_encoder_layer: 4 # number of encoder layer
+        d_model: 64
+        nhead: 4
+        n_encoder_layer: 8 # number of encoder layer
         n_decoder_layer: 1 # number of decoder layer
         dim_feedforward: 64 # dimension of hidden layer of FF in transformer
         drop: 0 # dropout ratio
         batch_first: true # to pass into pytorch enocder layer module
         embedding_dim: 20 # embedding dimension of agent IDs
-        in_mlp_layers: [32] # input side MLP and please ensure the last layer of the MLP is same as d_model.
-        out_mlp_layers: [32] # output side MLP
+        in_mlp_layers: [32, 64, 32] # input side MLP and please ensure the last layer of the MLP is same as d_model.
+        out_mlp_layers: [32, 64, 32] # output side MLP
         embed_before_mlp: false # check for using agent embedding before input side MLP
         only_encoder: true # check for using only encoder of transformer
         dynamic_mask: false # check for using ball2vec++ mask(i.e., true) against ball2vec mask(i.e., false)
 
 train:
-    epochs: 20 # no. of epochs
+    epochs: 100 # no. of epochs
     batch_size: 16
-    lr: 0.00001 # initial learning rate 
+    lr: 0.001 # initial learning rate 
     num_workers: 0 
-    use_agent_id: true # check for using agent ID
+    use_agent_id: false # check for using agent ID
     use_pos_embedding: true # check for using position embedding
     weight_folder: 'weights' # name of folder of stored parameters of model
     save_model: True # check for saving model parameters
