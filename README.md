@@ -138,6 +138,8 @@ A sample prediction of the trained model, where
 - `bobbled-line (-.-)` indicate the multi-time step prediction of the model from the time instance marked with `*` on the actual particle trajectory. 
 - `+/-` indicate charge on the particle
 
+A detailed model parameter tuning process can be access [here](https://docs.google.com/spreadsheets/d/e/2PACX-1vT645UAqxXMY99mqTIRP35lCgP_KQ3scDz3n3zgWmK5DC29XEQj07h1UNmBl-qjtjB2gwOEX5Liv7Cx/pub?gid=0&single=true&output=pdf). 
+
 ## References
 - Kipf, Thomas, et al. "Neural relational inference for interacting systems." International conference on machine learning. PMLR, 2018.
 - Alcorn, Michael A., and Anh Nguyen. "baller2vec: A multi-entity transformer for multi-agent spatiotemporal modeling." arXiv preprint arXiv:2102.03291 (2021).
