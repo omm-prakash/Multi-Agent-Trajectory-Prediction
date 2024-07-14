@@ -95,7 +95,7 @@ def train_model(model, device, train_opt, train_dataloader, valid_dataloader, in
                 train_epoch_loss.append(train_loss_val)
 
                 # save the model instance
-                if train_opt.save_model and epoch%train_opt.save_step==0:
+                if train_opt.save_model and (epoch+1)%train_opt.save_step==0:
                         file = os.path.join(result_dir, 'weights', f'epoch-{epoch+1}.pt')
                         torch.save({
                                 'epoch': epoch,
@@ -141,7 +141,7 @@ def train_model(model, device, train_opt, train_dataloader, valid_dataloader, in
         # summary.info(f'best validation loss: {min(valid_epoch_loss)} @ epoch: {valid_epochs[valid_epoch_loss.index(min(valid_epoch_loss))]}')
         with open(os.path.join(result_dir, 'summary.txt'), 'a') as f:
                 f.write('\n\n---------------- Training Result ----------------\n')
-                f.write(f'no. of training epochs: {train_opt.epochs-init_epoch}')
+                f.write(f'training epochs: {train_opt.epochs-init_epoch} on {torch.cuda.get_device_name(device.index)}')
                 f.write(f'\nbest train loss: {min(train_epoch_loss)} @ epoch: {train_epoch_loss.index(min(train_epoch_loss))+1} \n')
                 f.write(f'best validation loss: {min(valid_epoch_loss)} @ epoch: {valid_epochs[valid_epoch_loss.index(min(valid_epoch_loss))]} \n')
 
@@ -177,12 +177,14 @@ if __name__=='__main__':
                         shutil.rmtree(results)
         os.makedirs(results, exist_ok=True)
         entries = os.listdir(results)
-        expts = len([_ for _ in entries if os.path.isdir(os.path.join(results, _))])
+        # entries.sort()
+        expts = int(entries[-1].split('|')[0].strip().split('-')[1].strip()) if len(entries)>0 else 0
+        # expts = len([_ for _ in entries if os.path.isdir(os.path.join(results, _))])
 
         # result directory configurations
         result_dir = os.path.join(results, f'expt-{expts+1}| {tm}')
         os.makedirs(result_dir, exist_ok=True)
-        copy_file(os.path.join(os.getcwd(), 'config.yml'), os.path.join(result_dir, 'config.yml'))
+        copy_file(os.path.join(os.getcwd(), args.config_file), os.path.join(result_dir, 'config.yml'))
         logging = logging_setup(results)
         logger = get_logger(expts+1, result_dir)
         # summary = get_logger(f'summary:{expts+1}', result_dir, name='summary')
@@ -197,7 +199,7 @@ if __name__=='__main__':
                 wt.start()
                 config = load_config(args.config_file)
                 train_opt = config.train
-                train_opt.num_workers = os.cpu_count()//2
+                train_opt.num_workers = os.cpu_count()-1
                 model_opt = vars(config.model).get(args.model)
                 data_opt = vars(config.data).get(args.data)
                 logger.info(wt.end())

@@ -166,7 +166,7 @@ def plot_trajectory(data, n_particles, location, path, multi_step_location=None,
                     # plt.scatter(multi_step_location[0,i,0], multi_step_location[0,i,1], color=color[i], marker='.', alpha=0.3)
                     assert hf_time is not None, "hf_time not avialable."
                     plt.scatter(data.squeeze(0)[hf_time,i,1], data.squeeze(0)[hf_time,i,2], color=color[i], marker='*')
-                    plt.scatter(multi_step_location[:,i,0], multi_step_location[:,i,1], color=color[i], alpha=0.4, marker='.')
+                    plt.scatter(multi_step_location[:,i,0], multi_step_location[:,i,1], color=color[i], alpha=0.1, marker='.')
                 plt.legend()
         plt.xlabel('X')
         plt.ylabel('Y')
