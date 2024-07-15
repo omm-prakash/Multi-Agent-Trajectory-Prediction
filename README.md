@@ -5,15 +5,15 @@ Multi-agent movement trajectory prediction is a research field focusing on forec
 
 ## Related Works
 
-In this direction two recent papers, i.e., *Baller2vec* and *Baller2vec++* have made significant progress. Baller2vec introduces a multi-entity generalization of the standard Transformer that can efficiently integrate information across entities and time with minimal assumptions. Building on this work, baller2vec++ incorporates a specially designed `self-attention mask` and "`look-ahead`" trajectory sequences to better model statistically dependent agent trajectories. 
+In this direction I went into two recent papers, i.e., *Baller2vec* and *Baller2vec++*. Baller2vec introduces a multi-entity generalization of the standard Transformer that can efficiently integrate information across entities and time with minimal assumptions. Building on this work, baller2vec++ incorporates a specially designed `self-attention mask` and "`look-ahead`" trajectory sequences to better model statistically dependent agent trajectories. 
 
 ![alt text](.img/mask.png)
 A simple technique for learning to forecast statistically dependent agent trajectories is to modify the baller2vec self-attention mask such that it may "look ahead" at future positions of agents whose trajectories are created previous to the agent being processed in the current time step.
 
-In *Rudolph et al.*, author presented a unique self-supervised technique for multiagent trajectories, and developed a masking strategy that makes masking of different trajectories independent of one another, as well as a unique transformer architecture that factorises over time and agents. This renders our pretraining model's encoder permutation equivariant with respect to trajectory order, making it ideal for downstream tasks that need *permutation invariance with respect to agent order*.
+In *Rudolph et al.*, author presented a unique self-supervised technique for multiagent trajectories, and developed a masking strategy that makes masking of different trajectories independent of one another, as well as a unique transformer architecture that factorises over time and agents. This renders their pretraining model's encoder permutation equivariant with respect to trajectory order, making it ideal for downstream tasks that need *permutation invariance with respect to agent order*.
 
 ## Problem Formulation
-> To systematically test the essence of `agent-ID` in multi-agent trajectory prediction and the permutation invariance with respect to their order.  
+> To systematically test the effect of `agent-ID` in multi-agent trajectory prediction.
 
 Hypothesis: The use of `agent-ID` would not help in terms of model performance in a deterministic movement environment. 
 
@@ -28,7 +28,7 @@ where
 4. `features = 5`: data features, i.e., charge, X-coordinate, Y-coordinate, velocity-X-comp, velocity-Y-comp
 
 ## Methodology
-The task described above we purpose a vanilla transformer encoder with the mask purposed in *Baller2Vec*. Eight transformer encoder layers were used to get the optimal result. The input and output side neural network (NN) would have 32,64,32 number of neurons respectively. The number of neurons at the end of these NN are same as `d_model` and `n_features-1` for input and output side of the encoder respectively. The model is trained for next step prediction.   
+For the task described above we purpose a vanilla transformer encoder with the mask purposed in *Baller2Vec*. Eight transformer encoder layers were used to get the optimal result. The input and output side neural network (NN) would have 32,64,32 number of neurons respectively. The number of neurons at the end of these NN are same as `d_model` and `n_features-1` for input and output side of the encoder respectively. The model is trained for next step prediction.   
 
 ## Experiment Setup Instructions
 Follow these steps to download the repository and set up the Conda environment using `environment.yml`.
@@ -38,8 +38,8 @@ Follow these steps to download the repository and set up the Conda environment u
 First, clone the repository to your local machine using the following command:
 
 ```bash
-git clone https://github.com/yourusername/your-repo-name.git
-cd your-repo-name
+git clone https://github.com/omm-prakash/Multi-Agent-Trajectory-Prediction.git
+cd "Multi-Agent Trajectory Prediction"
 ```
 
 ### Step 2: Set Up Conda Environment
@@ -139,6 +139,26 @@ A sample prediction of the trained model, where
 - `+/-` indicate charge on the particle
 
 A detailed model parameter tuning process can be access [here](https://docs.google.com/spreadsheets/d/e/2PACX-1vT645UAqxXMY99mqTIRP35lCgP_KQ3scDz3n3zgWmK5DC29XEQj07h1UNmBl-qjtjB2gwOEX5Liv7Cx/pub?gid=0&single=true&output=pdf). 
+
+## Future Directions
+1. The decoder with the encoder will be implemented, to test the dependence of next time step action on fixed number of previous time step actions. 
+2. To implement the proposed idea in the above point a cross-attenstion mask would be used, i.e., as described below. 
+ ![alt text](.img/cross-mask.png)
+ S<sub>1</sub>: window size <br>
+ S<sub>2</sub>: data input to decoder <br>
+ S<sub>2</sub>+S<sub>2</sub>: data input to encoder
+ The encoder would be pre-trained for masked trajectory prediction.
+3. Using the decoder along with the encoder the expectation is to gain better result from the model. 
+
+## Drawbacks
+1. The model is not good for multi-agent multi-step trajectory prediction, which is expected from it as a derministic dataset was used for the model traing. 
+2. The model gradient clipping needs to be implemented, which the model gives unusually high error value when its trained more than 100 epochs as shown below.    
+![loss41.png](.img/loss41.png)![loss43.png](.img/loss43.png)
+
+## Some Insights
+1. By using even number of encoder layers the model performance improved by much margin from its performance from one less number of encoder layer being used. 
+2. Less the batch size better is the model performance but not good for optimal hardware usage. 
+3. Using the `look-ahead` mask purposed in the *baller2vec++* paper did not improve the model performance as compared with the purposed mask in *baller2vec* paper.  
 
 ## References
 - Kipf, Thomas, et al. "Neural relational inference for interacting systems." International conference on machine learning. PMLR, 2018.
